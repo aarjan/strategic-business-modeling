@@ -45,7 +45,7 @@ testdata = scale(testdata) # To keep our dataset safe, let's create a copy of it
 d = dist(testdata, method = "euclidean") # the dist() function computes the distances of all the observations in our dataset
 hcward = hclust(d, method="ward.D") # hclust() function performs hiearchical clustering, we pass it the distances, and we set the method argument to "ward.D"
 
-data$groups<-cutree(hcward,k=3) # assign our points to our k=3 clusters 
+data$groups<-cutree(hcward,k=2) # assign our points to our k=3 clusters 
 
 # The lattice library provides a complete set of functions for producing advanced plots.
 install.packages("lattice") #install the lattice package by using the install.packages() function
@@ -55,10 +55,10 @@ xyplot(ADS~ CV,main = "After Clustering", type="p",group=groups,data=data, # def
        par.settings = list(superpose.line=list(pch = 0:18, cex=1)), # the par.settings argument allows us to pass a list of display settings
        col=c('blue','green','red')) # finally we choose the colour of our plotted points per group
 
-
 ###########################################################
 ####     EXAMPLE N°2 - HUMAN RESSOURCES ANALYTICS      ####
 ###########################################################
+
 
 # Set your directory to the folder where you have downloaded the HR dataset 
 
@@ -79,9 +79,9 @@ testdata = scale(testdata) # the scale function automatically performs data norm
 d = dist(testdata, method = "euclidean") # the dist() function computes the distances of all the observations in our dataset
 hcward = hclust(d, method="ward.D") # hclust() function performs hiearchical clustering, we pass it the distances, and we set the method argument to "ward.D"
 
-data$groups = cutree(hcward,k=4) # assign our points to our k=4 clusters 
+data$groups = cutree(hcward,k=2) # assign our points to our k=4 clusters 
 
-aggdata = aggregate(.~ groups, data=data, FUN=mean) # The aggregate() function presents a summary of a statistic, broken down by one or more groups. Here we compute the mean of each variable for each group. 
+aggdata = aggregate(.~ groups, data=data, FUN=median) # The aggregate() function presents a summary of a statistic, broken down by one or more groups. Here we compute the mean of each variable for each group. 
 
 # One thing we would like to have is the proportion of our data that is in each cluster
 proptemp=aggregate(S~ groups, data=data, FUN=length) # we create a variable called proptemp which computes the number of observations in each group (using the S variable, but you can take any.)
@@ -99,11 +99,11 @@ testdata = scale(testdata) # We normalize again our original variables
 d = dist(testdata, method = "euclidean") # We compute the distances between observations
 hcward = hclust(d, method="ward.D") # Hiearchical Clustering using Ward criterion
 
-data$groups = cutree(hcward,k=4) # Create segments for k=4
+data$groups = cutree(hcward,k=2) # Create segments for k=4
 # Note that we re-use the original dataset "data" (where the variable Newborn is still present) and not "testdata" (where the variable Newborn has been removed)
 # Hence we'll be able to produce summary statistics also for the Newborn variable regardless it wasn't included when doing the second version of the clustering
 
-aggdata = aggregate(.~ groups, data=data, FUN=mean) # Aggregate the values again
+aggdata = aggregate(.~ groups, data=data, FUN=median) # Aggregate the values again
 
 proptemp=aggregate(S~ groups, data=data, FUN=length)  # Compute the number of observations per group
 aggdata$proportion=(proptemp$S)/sum(proptemp$S) # Compute the proportion
